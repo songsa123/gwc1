@@ -1,0 +1,107 @@
+@import "_reset.scss";
+
+.shopCar{
+    height: 40px;
+    padding: 10px;
+    // background: #ddd;
+    position: absolute;
+    right: 0;
+    .empty{
+        width: 40px;
+        height: 40px;
+        margin-top: 10px;
+        background-image: url(../img/car1.png);
+        background-size: 40px 40px;
+        position: relative;
+        // &.full{
+        //     background-image: url(../img/car1.png);
+        // }
+
+        span{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #fff;
+            border-radius: 50%;
+            line-height: 20px;
+            text-align: center;
+            color: #f00;
+        }
+
+        .goods-list{
+            width: 180px;
+            position: absolute;
+            top: 40px;
+
+            li{
+                width: 280px;
+                height: 60px;
+                background: rgba(0,0,0,.5);
+
+                img{
+                    display: inline-block;
+                    height: 60px;
+                    float: left;
+                    width: 40px;
+                }
+                h3{
+                    float: left;
+                    line-height: 60px;
+                    padding-left: 10px;
+                }
+                strong{
+                    display: block;
+                    float: left;
+                    line-height: 60px;
+                    padding:0 5px;
+                    color: yellowgreen;
+                }
+            }
+        }
+    }
+}
+
+.container{
+    width:1120px;
+    margin: 100px auto;
+
+    ul{
+        li{
+            width: 224px;
+            height: 405px;
+            float: left;
+            text-align: center;
+            box-shadow: 0 0 5px #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            h3{
+                line-height: 40px;
+                text-align: center;
+
+            }
+            img{
+                display: block;
+                width: 150px;
+                height: 150px;
+                // vertical-align: middle;
+                margin-top: 20px;
+                margin-left: 30px;
+                border-radius: 5px;
+            }
+            button{
+                width: 100%;
+                border-radius: 5px ;
+                background:none;
+                border : 1px solid #ddd;
+                background: yellowgreen;
+                color: #fff;
+            }
+        }
+    }
+}
+.updateCount{
+    font-size: 12px;
+    color: #fff;
+}

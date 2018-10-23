@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>详情页跳转</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        li{
+            list-style: none;
+        }
+        #box{
+            width: 1000px;
+            margin:20px auto;
+            box-shadow: 0 0 5px #ddd;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        #box ul:after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+        #box ul li{
+            width: 23%;
+            box-sizing: border-box;
+            padding: 5px;
+            box-shadow: 0 0 5px #000;
+            float: left;
+            height: 250px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+        #box ul li img{
+            width: 150px;
+            height: 150px;
+            margin-left: 30px;
+            
+        }
+        #box ul li p{
+            font-size: 12px;
+            color: #666;
+        }
+        #list{
+            margin-left: 50px;
+        }
+       
+    </style>
+</head>
+<body>
+    <button id="btn">渲染页面</button>
+    <div id="box">
+        <ul id="list">
+            
+        </ul>
+    </div>
+    <script src="js/common.js"></script>
+    <script src="js/jquery-3.3.1.js"></script>
+    <!-- <script src="js/cookie.js"></script> -->
+    <script>
+  
+  function WaterFall(){}
+        $.extend(WaterFall.prototype,{
+            init:function(){
+                // 页数;
+                this.page = 1;
+                // 结构外包围;
+                this.main = $("#list");
+                // 是否在加载中;
+                this.loading = false;
+
+                this.loadJson()
+                .done(function(res){
+                    // deferred 的 done 回调 this指向的都是 jquery 对象本身
+                    // console.log(res,this);
+                    this.renderPage(res);
+                })
+
+                this.bindEvent();
+            },
+            loadJson:function(){
+                var opt = {
+                    url:"http://www.wookmark.com/api/json/popular",
+                    dataType:"jsonp",
+                    data:{page:this.page},
+                    // this => 指向实例化对象;
+                    context:this
+                }
+                return $.ajax(opt);
+            },
+            renderPage:function(json){
+                console.log(json);
+                var html = "";
+                for(var i = 0 ; i < json.length ; i ++){
+                    html += `  <li class="box" ">
+                                    <img  src="${json[i].image}" alt="" data-id="${i}" id="img">
+                                    <p>${json[i].title}</p>
+                               </li>
+                            `
+                }
+                this.main.html(this.main.html() + html);
+            },
+            
+            bindEvent(){
+                $(window).on("scroll",this.ifLoad.bind(this));
+            },
+            ifLoad(){
+                // console.log(1);
+                // scrollTop ;
+                // 最后一张图片;
+                // 当前屏幕的高度;
+                var scrollTop = $("html,body").scrollTop();
+                var clientHeight = $("html")[0].clientHeight;
+                var lastBox = this.main.children(":last");
+                // console.log(scrollTop,clientHeight,lastBox.offset());
+                if(scrollTop + clientHeight > lastBox.offset().top){
+                    // 加载数据;
+                    if(this.loading){
+                        return 0;
+                    }
+                    this.loading = true;
+                    // console.log("加载");
+                    this.page ++;
+                    this.loadJson()
+                    .done(function(res){
+                        // deferred 的 done 回调 this指向的都是 jquery 对象本身
+                        // console.log(res,this);
+                        this.renderPage(res);
+                    })
+                }
+            }
+        })
+
+        var waterfall = new WaterFall();
+        waterfall.init();
+
+       // 选中元素绑定事件;
+       var oList = document.getElementById("list");
+       // 委托;
+       
+       oList.onclick = function(evt){
+           var e = evt || window.event;
+           var img = document.querySelectorAll("#list img");
+           var imgArray = Array.from(img);
+           var target = e.target || e.srcElement;
+           console.log(imgArray);   
+            if(imgArray.indexOf(target) != -1){
+                // 页面跳转;
+                // 先要储存cookie;
+                // var goodsId="${json[i].id}";
+                cookie("goodsId",target.getAttribute("data-id"));
+                
+                location.href = "detail.html";
+            }
+       }
+       // 跨页面的传值;
+       // cookie;
+       // location.href;
+    </script>
+</body>
+</html>
